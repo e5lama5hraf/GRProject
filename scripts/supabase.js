@@ -34,7 +34,7 @@ export async function checkAuth(requireAuth = true) {
         if (error) throw error;
         
         const authPages = ['index.html'];
-        const protectedPages = ['Home.html', 'settings.html', 'files.html'];
+        const protectedPages = ['home.html', 'settings.html', 'files.html'];
         
         const currentPage = window.location.pathname.split('/').pop() || 'index.html';
         
@@ -46,7 +46,7 @@ export async function checkAuth(requireAuth = true) {
             }
         } else if (session && authPages.includes(currentPage)) {
             // Already authenticated but trying to access auth page
-            window.location.href = 'Home.html';
+            window.location.href = 'home.html';
             return false;
         }
         
