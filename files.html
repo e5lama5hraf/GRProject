@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Files - ClassMate</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>ClassMate</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="Home.html">Home</a></li>
+                <li class="active"><a href="files.html">Files</a></li>
+                <li><a href="archive.html">Archive</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a onclick="logout()" id="logout-btn">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="Home-header">
+                <h1>Files</h1>
+            </header>
+
+            <section class="card files-card">
+                <div class="card-header">
+                    <h2>My Files</h2>
+                    <button id="upload-file-btn" class="btn btn-primary">Upload File</button>
+                </div>
+                <div class="card-body">
+                    <div class="file-upload-area" id="dropzone">
+                        <form id="file-upload-form" style="display: none;">
+                            <input type="file" id="file-input" multiple>
+                        </form>
+                        <div class="dropzone-content">
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                            </div>
+                            <p>Drag and drop files here or click to upload</p>
+                        </div>
+                        <div class="upload-progress" id="upload-progress" style="display: none;">
+                            <div class="progress-bar">
+                                <div class="progress" id="progress-bar"></div>
+                            </div>
+                            <p id="progress-text">Uploading...</p>
+                        </div>
+                    </div>
+
+                    <div class="files-list-header">
+                        <div class="file-name">Name</div>
+                        <div class="file-type">Type</div>
+                        <div class="file-size">Size</div>
+                        <div class="file-date">Uploaded</div>
+                        <div class="file-actions">Actions</div>
+                    </div>
+
+                    <div class="files-list" id="files-list">
+                        <!-- Files will be loaded here -->
+                        <div class="empty-state">Loading files...</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- File Preview Modal -->
+    <div class="modal" id="file-preview-modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3 id="file-preview-name">File Preview</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="file-preview-container" id="file-preview-container">
+                    <!-- Preview content will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="download-file-btn" class="btn btn-primary" download>Download</a>
+                    <button id="delete-file-btn" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module"  src="scripts/supabase.js"></script>
+    <script type="module"  src="scripts/auth.js"></script>
+    <script type="module" src="scripts/files.js"></script>
+</body>
+</html> 

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive - ClassMate</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>ClassMate</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="Home.html">Home</a></li>
+                <li><a href="files.html">Files</a></li>
+                <li><a href="archive.html">Archive</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a onclick="logout()" id="logout-btn">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="Home-header">
+                <h1>Archive</h1>
+                <div class="user-info">
+                    <span id="user-name">Loading...</span>
+                </div>
+            </header>
+
+            <section class="card archive-card">
+                <div class="card-header">
+                    <h2>Shared Files Archive</h2>
+                    <button id="upload-archive-btn" class="btn btn-primary">Upload File</button>
+                </div>
+                <div class="card-body">
+                    <div class="file-upload-area" id="archive-dropzone" style="display: none;">
+                        <form id="archive-upload-form" style="display: none;">
+                            <input type="file" id="archive-file-input" multiple>
+                        </form>
+                        <div class="dropzone-content">
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                            </div>
+                            <p>Drag and drop files here or click to upload</p>
+                        </div>
+                        <div class="upload-progress" id="archive-upload-progress" style="display: none;">
+                            <div class="progress-bar">
+                                <div class="progress" id="archive-progress-bar"></div>
+                            </div>
+                            <p id="archive-progress-text">Uploading...</p>
+                        </div>
+                    </div>
+
+                    <div class="filter-controls">
+                        <div class="form-group">
+                            <label for="filter-faculty">Faculty</label>
+                            <select id="filter-faculty">
+                                <option value="">All Faculties</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filter-year">Academic Year</label>
+                            <select id="filter-year">
+                                <option value="">All Years</option>
+                                <option value="1">First Year</option>
+                                <option value="2">Second Year</option>
+                                <option value="3">Third Year</option>
+                                <option value="4">Fourth Year</option>
+                                <option value="5">Fifth Year</option>
+                                <option value="6">Sixth Year</option>
+                            </select>
+                        </div>
+                        <button id="apply-filters" class="btn btn-small">Apply Filters</button>
+                    </div>
+
+                    <div class="files-list-header">
+                        <div class="file-name">Name</div>
+                        <div class="file-owner">Uploaded By</div>
+                        <div class="file-type">Type</div>
+                        <div class="file-size">Size</div>
+                        <div class="file-date">Uploaded</div>
+                        <div class="file-actions">Actions</div>
+                    </div>
+
+                    <div class="files-list" id="archive-files-list">
+                        <!-- Files will be loaded here -->
+                        <div class="empty-state">Loading shared files...</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- File Preview Modal -->
+    <div class="modal" id="archive-preview-modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3 id="archive-file-preview-name">File Preview</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="file-preview-container" id="archive-file-preview-container">
+                    <!-- Preview content will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="archive-download-file-btn" class="btn btn-primary" download>Download</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="scripts/supabase.js"></script>
+    <script type="module" src="scripts/archive.js"></script>
+</body>
+</html>

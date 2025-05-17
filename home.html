@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - ClassMate</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>ClassMate</h2>
+            </div>
+            <ul class="nav-links">
+                <li class="active"><a href="Home.html">Home</a></li>
+                <li><a href="files.html">Files</a></li>
+                <li><a href="archive.html">Archive</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a onclick="logout()" id="logout-btn">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="Home-header">
+                <h1>Home</h1>
+                <div class="user-info">
+                    <span id="user-name">Loading...</span>
+                </div>
+            </header>
+
+            <div class="Home-grid">
+                <!-- Weekly Schedule Section -->
+                <section class="card schedule-card">
+                    <div class="card-header">
+                        <h2>Weekly Schedule</h2>
+                        <button id="add-schedule-btn" class="btn btn-small">Add Class</button>
+                    </div>
+                    <div class="card-body">
+                        <div id="calendar"></div>
+                    </div>
+                </section>
+
+                <!-- Tasks Section -->
+                <section class="card tasks-card">
+                    <div class="card-header">
+                        <h2>Tasks</h2>
+                        <button id="add-task-btn" class="btn btn-small">Add Task</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="tasks-container">
+                            <div class="tasks-list" id="tasks-list">
+                                <!-- Tasks will be loaded here -->
+                                <div class="empty-state">Loading tasks...</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for adding/editing schedule -->
+    <div class="modal" id="schedule-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="schedule-modal-title">Add Class</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="schedule-form">
+                    <input type="hidden" id="schedule-id">
+                    <div class="form-group">
+                        <label for="class-name">Class Name</label>
+                        <input type="text" id="class-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="class-day">Day</label>
+                        <select id="class-day" required>
+                            <option value="1">Monday</option>
+                            <option value="2">Tuesday</option>
+                            <option value="3">Wednesday</option>
+                            <option value="4">Thursday</option>
+                            <option value="5">Friday</option>
+                            <option value="6">Saturday</option>
+                            <option value="0">Sunday</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="class-start">Start Time</label>
+                        <input type="time" id="class-start" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="class-end">End Time</label>
+                        <input type="time" id="class-end" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="class-room">Room</label>
+                        <input type="text" id="class-room">
+                    </div>
+                    <div class="form-group">
+                        <label for="class-professor">Professor</label>
+                        <input type="text" id="class-professor">
+                    </div>
+                    <div class="form-group button-group">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" id="delete-schedule-btn" class="btn btn-danger">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding/editing tasks -->
+    <div class="modal" id="task-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="task-modal-title">Add Task</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="task-form">
+                    <input type="hidden" id="task-id">
+                    <div class="form-group">
+                        <label for="task-title">Title</label>
+                        <input type="text" id="task-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-description">Description</label>
+                        <textarea id="task-description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-due-date">Due Date</label>
+                        <input type="date" id="task-due-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-priority">Priority</label>
+                        <select id="task-priority">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group button-group">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" id="delete-task-btn" class="btn btn-danger">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+    <script type="module" src="scripts/supabase.js"></script>
+    <script type="module" src="scripts/schedule.js"></script>
+    <script type="module" src="scripts/tasks.js"></script>
+</body>
+</html> 

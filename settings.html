@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - ClassMate</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>ClassMate</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="Home.html">Home</a></li>
+                <li><a href="files.html">Files</a></li>
+                <li><a href="archive.html">Archive</a></li>
+                <li class="active"><a href="settings.html">Settings</a></li>
+                <li><a onclick="logout()" id="logout-btn">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="Home-header">
+                <h1>Settings</h1>
+            </header>
+
+            <section class="card profile-card">
+                <div class="card-header">
+                    <h2>Profile Settings</h2>
+                </div>
+                <div class="card-body">
+                    <form id="profile-form">
+                        <div class="form-section">
+                            <h3>Personal Information</h3>
+                            <div class="form-group">
+                                <label for="profile-fullname">Full Name</label>
+                                <input type="text" id="profile-fullname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-email">Email</label>
+                                <input type="email" id="profile-email" readonly>
+                                <small>Email cannot be changed.</small>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Academic Information</h3>
+                            <div class="form-group">
+                                <label for="profile-faculty">Faculty</label>
+                                <input type="text" id="profile-faculty" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-year">Academic Year</label>
+                                <select id="profile-year" required>
+                                    <option value="1">First Year</option>
+                                    <option value="2">Second Year</option>
+                                    <option value="3">Third Year</option>
+                                    <option value="4">Fourth Year</option>
+                                    <option value="5">Fifth Year</option>
+                                    <option value="6">Sixth Year</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group button-group">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                        <div class="success-message" id="profile-success"></div>
+                        <div class="error-message" id="profile-error"></div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="card password-card">
+                <div class="card-header">
+                    <h2>Change Password</h2>
+                </div>
+                <div class="card-body">
+                    <form id="password-form">
+                        <div class="form-group">
+                            <label for="current-password">Current Password</label>
+                            <input type="password" id="current-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-password">New Password</label>
+                            <input type="password" id="new-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm New Password</label>
+                            <input type="password" id="confirm-password" required>
+                        </div>
+                        <div class="form-group button-group">
+                            <button type="submit" class="btn btn-primary">Update Password</button>
+                        </div>
+                        <div class="success-message" id="password-success"></div>
+                        <div class="error-message" id="password-error"></div>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="scripts/supabase.js"></script>
+    <script type="module" src="scripts/auth.js"></script>
+    <script type="module" src="scripts/settings.js"></script>
+</body>
+</html> 
