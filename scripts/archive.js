@@ -427,26 +427,3 @@ function getFileIcon(fileName) {
             return '📁';
     }
 }
-
-// أضف هذا الكود لفحص سرعة الاتصال
-async function checkInternetSpeed() {
-  const startTime = Date.now();
-  try {
-    const response = await fetch('https://httpbin.org/stream-bytes/100000');
-    const data = await response.arrayBuffer();
-    const duration = (Date.now() - startTime) / 1000;
-    const speed = (100000 * 8 / duration / 1024 / 1024).toFixed(2); // Mbps
-    console.log(`سرعة الاتصال: ${speed} Mbps`);
-    return speed > 1; // سرعة مقبولة إذا كانت أكثر من 1Mbps
-  } catch (error) {
-    console.error('فشل فحص سرعة الإنترنت:', error);
-    return false;
-  }
-}
-
-// استدعاء الدالة
-checkInternetSpeed().then(isGood => {
-  if (!isGood) {
-    alert('اتصال الإنترنت ضعيف! يرجى التحقق من اتصالك.');
-  }
-});
