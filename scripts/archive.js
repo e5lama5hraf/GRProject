@@ -427,3 +427,4 @@ function getFileIcon(fileName) {
             return '📁';
     }
 }
+

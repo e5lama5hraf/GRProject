@@ -79,7 +79,7 @@ async function handleLogin(e) {
         if (error) throw error;
         
         // Redirect to Home on successful login
-        window.location.href = 'Home.html';
+        window.location.href = 'home.html';
     } catch (error) {
         console.error('Login error:', error);
         showError('login-error', `Login failed: ${error.message}`);

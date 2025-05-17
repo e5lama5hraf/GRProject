@@ -322,3 +322,4 @@ async function handleTaskEdit(event) {
         alert('Failed to load task details. Please try again.');
     }
 } 
+

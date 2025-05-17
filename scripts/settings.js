@@ -168,3 +168,4 @@ async function handlePasswordUpdate(e) {
         showError('password-error', `Failed to update password: ${error.message}`);
     }
 } 
+
