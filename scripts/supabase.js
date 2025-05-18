@@ -5,19 +5,12 @@
 
 // Import the createClient function from Supabase
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-import { isMobile } from './supabase.js';
-
-if (isMobile()) {
-    // تكييف الواجهة للهواتف
-}
 
 // Replace with your Supabase URL and anon key
 const SUPABASE_URL = 'https://ndidfnjsazqnoyfrdwxu.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kaWRmbmpzYXpxbm95ZnJkd3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0MzY1NjUsImV4cCI6MjA2MzAxMjU2NX0.XAdttpwLnoz9loSjWAOsDf3e9PtiqRO32A-hprF9qRo';
 // Initialize the Supabase client
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-// كشف نوع الجهاز
-export const isMobile = () => window.innerWidth <= 768;
 
 // Test the connection
 supabase.auth.getSession().then(

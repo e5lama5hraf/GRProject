@@ -29,12 +29,12 @@ function initCalendar() {
     const calendarEl = document.getElementById('calendar');
     if (!calendarEl) return;
     
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: window.innerWidth < 768 ? 'timeGridDay' : 'timeGridWeek',
+    calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridWeek',
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
-            right: window.innerWidth < 768 ? '' : 'timeGridWeek,timeGridDay,listWeek'
+            right: 'timeGridWeek,timeGridDay,listWeek'
         },
         allDaySlot: false,
         slotMinTime: '07:00:00',
@@ -189,14 +189,6 @@ function initCalendar() {
     });
     
     calendar.render();
-     // إعادة رسم التقويم عند تغيير حجم النافذة
-    window.addEventListener('resize', function() {
-        if (window.innerWidth < 768) {
-            calendar.changeView('timeGridDay');
-        } else {
-            calendar.changeView('timeGridWeek');
-        }
-    });
 }
 
 /**
