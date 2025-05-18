@@ -392,4 +392,3 @@ async function handleFileDelete() {
         alert('Failed to delete file. Please try again.');
     }
 } 
-

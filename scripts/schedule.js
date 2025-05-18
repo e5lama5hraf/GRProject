@@ -1,6 +1,6 @@
 /**
- * Schedule Module
- * Manages weekly class schedule using FullCalendar library
+ * Schedule Module - Improved Version
+ * Manages weekly class schedule using FullCalendar with better UX
  */
 
 import { supabase, checkAuth, showError, showSuccess, showModal, hideModal } from './supabase.js';
@@ -16,13 +16,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Initialize schedule components
     initCalendar();
     initScheduleModal();
+    initViewOptions();
     
     // Load user's schedule data
     loadUserSchedule(user.id);
 });
 
 /**
- * Initialize the FullCalendar instance
+ * Initialize the FullCalendar instance with improved configuration
  */
 function initCalendar() {
     const calendarEl = document.getElementById('calendar');
@@ -31,15 +32,19 @@ function initCalendar() {
     calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'timeGridWeek',
         headerToolbar: {
-            left: '',
+            left: 'prev,next today',
             center: 'title',
-            right: ''
+            right: 'timeGridWeek,timeGridDay,listWeek'
         },
         allDaySlot: false,
         slotMinTime: '07:00:00',
         slotMaxTime: '22:00:00',
         height: 'auto',
         weekends: true,
+        editable: true, // Enable drag-and-drop
+        selectable: true, // Enable date/time selection
+        selectMirror: true,
+        dayMaxEvents: true,
         slotLabelFormat: {
             hour: 'numeric',
             minute: '2-digit',
@@ -47,10 +52,166 @@ function initCalendar() {
         },
         eventClick: function(info) {
             openScheduleModal(info.event);
-        }
+        },
+        eventDidMount: function(info) {
+            // Add action buttons to events
+            const eventEl = info.el;
+            const titleEl = eventEl.querySelector('.fc-event-title');
+            
+            if (titleEl) {
+                titleEl.innerHTML = `
+                    ${info.event.title}
+                    <div class="fc-event-actions">
+                        <button class="fc-event-action edit-event" title="Edit">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button class="fc-event-action delete-event" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                // Add event listeners to action buttons
+                eventEl.querySelector('.edit-event').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openScheduleModal(info.event);
+                });
+                
+                eventEl.querySelector('.delete-event').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    currentScheduleId = info.event.extendedProps.scheduleId;
+                    handleScheduleDelete();
+                });
+            }
+        },
+        select: function(info) {
+            // When user selects time slot, open modal to add new event
+            currentScheduleId = null;
+            document.getElementById('schedule-form').reset();
+            document.getElementById('schedule-modal-title').textContent = 'Add Class';
+            document.getElementById('delete-schedule-btn').style.display = 'none';
+            
+            // Set default time values
+            document.getElementById('class-start').value = formatTime(info.start);
+            document.getElementById('class-end').value = formatTime(info.end);
+            
+            showModal('schedule-modal');
+            calendar.unselect();
+        },
+        eventDrop: async function(info) {
+            // Handle event drag-and-drop
+            try {
+                const event = info.event;
+                const dayOfWeek = event.start.getDay();
+                const startTime = formatTime(event.start);
+                const endTime = formatTime(event.end);
+                
+                const { error } = await supabase
+                    .from('schedules')
+                    .update({
+                        day: dayOfWeek,
+                        start_time: startTime,
+                        end_time: endTime
+                    })
+                    .eq('id', event.extendedProps.scheduleId);
+                
+                if (error) throw error;
+                
+                showSuccess('Schedule updated successfully');
+            } catch (error) {
+                console.error('Failed to update schedule:', error);
+                info.revert();
+                showError('Failed to update schedule');
+            }
+        },
+        eventResize: async function(info) {
+            // Handle event resizing
+            try {
+                const event = info.event;
+                const endTime = formatTime(event.end);
+                
+                const { error } = await supabase
+                    .from('schedules')
+                    .update({
+                        end_time: endTime
+                    })
+                    .eq('id', event.extendedProps.scheduleId);
+                
+                if (error) throw error;
+                
+                showSuccess('Schedule updated successfully');
+            } catch (error) {
+                console.error('Failed to update schedule:', error);
+                info.revert();
+                showError('Failed to update schedule');
+            }
+        },
+
+        eventContent: function(arg) {
+            return {
+                html: `
+                    <div class="fc-event-main">
+                        <div class="fc-event-title">
+                            ${arg.event.title}
+                            <div class="fc-event-actions">
+                                <button class="fc-event-edit" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="fc-event-delete" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="fc-event-details">
+                            ${arg.timeText} • ${arg.event.extendedProps.room || ''}
+                        </div>
+                    </div>
+                `
+            };
+        },
+        
+        eventDidMount: function(info) {
+            // إضافة حدث النقر لزر التعديل
+            info.el.querySelector('.fc-event-edit').addEventListener('click', (e) => {
+                e.stopPropagation();
+                openScheduleModal(info.event);
+            });
+            
+            // إضافة حدث النقر لزر الحذف
+            info.el.querySelector('.fc-event-delete').addEventListener('click', (e) => {
+                e.stopPropagation();
+                currentScheduleId = info.event.extendedProps.scheduleId;
+                if (confirm('Are you sure you want to delete this event?')) {
+                    handleScheduleDelete();
+                }
+            });
+        },
     });
     
     calendar.render();
+}
+
+/**
+ * Initialize view option buttons
+ */
+function initViewOptions() {
+    const viewOptions = document.querySelectorAll('.view-option');
+    viewOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            viewOptions.forEach(opt => opt.classList.remove('active'));
+            option.classList.add('active');
+            calendar.changeView(option.dataset.view);
+        });
+    });
+}
+
+/**
+ * Format time to HH:MM
+ */
+function formatTime(date) {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
 }
 
 /**
@@ -144,30 +305,29 @@ async function loadUserSchedule(userId) {
  */
 function openScheduleModal(event = null) {
     const modalTitle = document.getElementById('schedule-modal-title');
-    const scheduleForm = document.getElementById('schedule-form');
     const deleteBtn = document.getElementById('delete-schedule-btn');
     
     // Reset form
-    scheduleForm.reset();
+    document.getElementById('schedule-form').reset();
     
     if (event) {
-        // Editing existing schedule
-        modalTitle.textContent = 'Edit Class';
+        // Editing existing event
+        modalTitle.textContent = "Edit Event";
         deleteBtn.style.display = 'block';
         
-        // Set form values
+        // Fill form with event data
         document.getElementById('schedule-id').value = event.extendedProps.scheduleId;
         document.getElementById('class-name').value = event.title;
-        document.getElementById('class-day').value = event.daysOfWeek[0];
-        document.getElementById('class-start').value = event.startTime;
-        document.getElementById('class-end').value = event.endTime;
+        document.getElementById('class-day').value = event.extendedProps.day;
+        document.getElementById('class-start').value = event.extendedProps.start_time;
+        document.getElementById('class-end').value = event.extendedProps.end_time;
         document.getElementById('class-room').value = event.extendedProps.room || '';
         document.getElementById('class-professor').value = event.extendedProps.professor || '';
         
         currentScheduleId = event.extendedProps.scheduleId;
     } else {
-        // Adding new schedule
-        modalTitle.textContent = 'Add Class';
+        // Adding new event
+        modalTitle.textContent = "Add New Event";
         deleteBtn.style.display = 'none';
         currentScheduleId = null;
     }

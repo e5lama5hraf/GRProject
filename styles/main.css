@@ -353,6 +353,8 @@ input, select, textarea {
     font-size: 1.25rem;
 }
 
+
+
 /* Tasks */
 .tasks-container {
     max-height: 500px;
@@ -675,3 +677,50 @@ input, select, textarea {
     }
 }
 
+/* تنسيق أزرار التعديل والحذف */
+.fc-event-actions {
+    display: flex;
+    gap: 5px;
+    margin-left: auto;
+}
+
+.fc-event-edit, .fc-event-delete {
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    border-radius: 3px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    font-size: 12px;
+    padding: 0;
+}
+
+.fc-event-edit:hover {
+    background: rgba(255, 255, 255, 0.5);
+    color: #4CAF50;
+}
+
+.fc-event-delete:hover {
+    background: rgba(255, 255, 255, 0.5);
+    color: #f44336;
+}
+
+.fc-event-title {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.fc-event-main {
+    padding: 4px 6px;
+}
+
+.fc-event-details {
+    font-size: 0.8em;
+    opacity: 0.9;
+    margin-top: 2px;
+}

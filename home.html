@@ -6,6 +6,7 @@
     <title>Home - ClassMate</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="app-container">
@@ -15,7 +16,7 @@
                 <h2>ClassMate</h2>
             </div>
             <ul class="nav-links">
-                <li class="active"><a href="home.html">Home</a></li>
+                <li class="active"><a href="Home.html">Home</a></li>
                 <li><a href="files.html">Files</a></li>
                 <li><a href="archive.html">Archive</a></li>
                 <li><a href="settings.html">Settings</a></li>
@@ -25,14 +26,14 @@
 
         <!-- Main Content Area -->
         <main class="main-content">
-            <header class="home-header">
+            <header class="Home-header">
                 <h1>Home</h1>
                 <div class="user-info">
                     <span id="user-name">Loading...</span>
                 </div>
             </header>
 
-            <div class="home-grid">
+            <div class="Home-grid">
                 <!-- Weekly Schedule Section -->
                 <section class="card schedule-card">
                     <div class="card-header">
@@ -67,14 +68,14 @@
     <div class="modal" id="schedule-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="schedule-modal-title">Add Class</h3>
+                <h3 id="schedule-modal-title">Add Event</h3>
                 <span class="close-modal">&times;</span>
             </div>
             <div class="modal-body">
                 <form id="schedule-form">
                     <input type="hidden" id="schedule-id">
                     <div class="form-group">
-                        <label for="class-name">Class Name</label>
+                        <label for="class-name">Event Title</label>
                         <input type="text" id="class-name" required>
                     </div>
                     <div class="form-group">
