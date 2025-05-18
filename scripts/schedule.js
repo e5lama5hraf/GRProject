@@ -28,6 +28,15 @@ document.addEventListener('DOMContentLoaded', async function() {
 function initCalendar() {
     const calendarEl = document.getElementById('calendar');
     if (!calendarEl) return;
+
+    if (window.innerWidth < 768) {
+        calendar.setOption('headerToolbar', {
+            left: 'prev,next',
+            center: 'title',
+            right: ''
+        });
+        calendar.changeView('timeGridDay'); // عرض يوم واحد افتراضيًا على الجوال
+    }
     
     calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'timeGridWeek',
@@ -39,10 +48,12 @@ function initCalendar() {
         allDaySlot: false,
         slotMinTime: '07:00:00',
         slotMaxTime: '22:00:00',
-        height: 'auto',
+        height: 'auto', // تغيير من قيمة ثابتة إلى auto
+        contentHeight: 'auto', // إضافة هذه الخاصية
+        aspectRatio: 1.5, // تعديل نسبة العرض إلى الارتفاع
         weekends: true,
-        editable: true, // Enable drag-and-drop
-        selectable: true, // Enable date/time selection
+        editable: true,
+        selectable: true,
         selectMirror: true,
         dayMaxEvents: true,
         slotLabelFormat: {
@@ -189,6 +200,10 @@ function initCalendar() {
     });
     
     calendar.render();
+
+     window.addEventListener('resize', function() {
+        calendar.updateSize();
+    });
 }
 
 /**
