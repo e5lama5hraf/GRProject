@@ -809,3 +809,17 @@ input, select, textarea {
     margin-top: 2px;
 }
 
+.delete-file-btn {
+    background-color: var(--danger);
+    color: white;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.delete-file-btn:hover {
+    background-color: #c82333;
+}

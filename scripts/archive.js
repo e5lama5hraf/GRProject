@@ -291,6 +291,7 @@ function renderArchiveFiles(files) {
         const fileTypeDisplay = file.file_type.split('/')[1] ? file.file_type.split('/')[1].toUpperCase() : 'FILE';
         const fileSizeDisplay = formatFileSize(file.file_size);
         const uploadedAt = formatDate(file.uploaded_at);
+        const isOwner = file.user_id === currentUser.id;
         
         filesList += `
             <div class="file-item">
@@ -309,6 +310,12 @@ function renderArchiveFiles(files) {
                         data-name="${file.file_name}">
                         View
                     </button>
+                    ${isOwner ? `
+                    <button type="button" class="delete-file-btn" 
+                        data-id="${file.id}" 
+                        data-path="${file.file_path}">
+                        Delete
+                    </button>` : ''}
                 </div>
             </div>
         `;
@@ -316,12 +323,21 @@ function renderArchiveFiles(files) {
     
     filesContainer.innerHTML = filesList;
     
-    // Add event listeners to preview buttons
+    // Add event listeners
     document.querySelectorAll('.preview-file-btn').forEach(button => {
         button.addEventListener('click', handleArchiveFilePreview);
     });
+    
+    document.querySelectorAll('.delete-file-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            if (confirm('Are you sure you want to delete this file?')) {
+                const fileId = e.target.getAttribute('data-id');
+                const filePath = e.target.getAttribute('data-path');
+                deleteArchiveFile(fileId, filePath);
+            }
+        });
+    });
 }
-
 /**
  * Handle archive file preview
  * @param {Event} event - Click event
@@ -425,5 +441,54 @@ function getFileIcon(fileName) {
             return '📄';
         default:
             return '📁';
+    }
+}
+
+/**
+ * Delete archive file (only if owned by current user)
+ * @param {string} fileId - ID of the file to delete
+ * @param {string} filePath - Path of the file in storage
+ */
+async function deleteArchiveFile(fileId, filePath) {
+    try {
+        // التحقق من ملكية الملف أولاً
+        const { data: file, error: fetchError } = await supabase
+            .from('archive')
+            .select('user_id, file_path')
+            .eq('id', fileId)
+            .single();
+            
+        if (fetchError) throw new Error(`Fetch error: ${fetchError.message}`);
+        
+        if (file.user_id !== currentUser.id) {
+            throw new Error('You can only delete your own files');
+        }
+
+        // 1. حذف من التخزين أولاً
+        const { data: storageData, error: storageError } = await supabase.storage
+            .from('student-files')
+            .remove([file.file_path]); // استخدم file.file_path بدلاً من المعلمة
+        
+        if (storageError) throw new Error(`Storage error: ${storageError.message}`);
+        
+        // 2. ثم حذف من قاعدة البيانات
+        const { error: dbError } = await supabase
+            .from('archive')
+            .delete()
+            .eq('id', fileId);
+            
+        if (dbError) throw new Error(`Database error: ${dbError.message}`);
+        
+        showSuccess('File deleted successfully');
+        loadSharedFiles();
+    } catch (error) {
+        console.error('Delete failed:', error);
+        showError(`Delete failed: ${error.message}`);
+        
+        // لعرض تفاصيل الخطأ للمطورين في الكونسول
+        const { data: storageData } = await supabase.storage
+            .from('student-files')
+            .list('archive');
+        console.log('Current storage files:', storageData);
     }
 }
