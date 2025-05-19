@@ -28,15 +28,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 function initCalendar() {
     const calendarEl = document.getElementById('calendar');
     if (!calendarEl) return;
-
-    if (window.innerWidth < 768) {
-        calendar.setOption('headerToolbar', {
-            left: 'prev,next',
-            center: 'title',
-            right: ''
-        });
-        calendar.changeView('timeGridDay'); // عرض يوم واحد افتراضيًا على الجوال
-    }
     
     calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'timeGridWeek',
