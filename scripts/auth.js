@@ -151,3 +151,29 @@ export async function logout() {
         alert(`Failed to log out: ${error.message}`);
     }
 } 
+
+
+async function displayUserName() {
+    try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { data: profile, error } = await supabase
+            .from('students')
+            .select('full_name')
+            .eq('user_id', user.id)
+            .single();
+
+        if (error) throw error;
+
+        const userName = document.getElementById('user-name');
+        if (userName) {
+            userName.textContent = profile.full_name || user.email;
+        }
+    } catch (error) {
+        console.error('Error fetching user name:', error);
+    }
+}
+
+// Call the function when the page loads
+document.addEventListener('DOMContentLoaded', displayUserName);
