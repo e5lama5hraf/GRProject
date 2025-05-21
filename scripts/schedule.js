@@ -37,8 +37,8 @@ function initCalendar() {
             right: 'timeGridWeek,timeGridDay,listWeek'
         },
         allDaySlot: false,
-        slotMinTime: '07:00:00',
-        slotMaxTime: '22:00:00',
+        slotMinTime: '08:00:00',
+        slotMaxTime: '24:00:00',
         height: 'auto', // تغيير من قيمة ثابتة إلى auto
         contentHeight: 'auto', // إضافة هذه الخاصية
         aspectRatio: 1.5, // تعديل نسبة العرض إلى الارتفاع

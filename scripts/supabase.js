@@ -34,7 +34,7 @@ export async function checkAuth(requireAuth = true) {
         if (error) throw error;
         
         const authPages = ['index.html'];
-        const protectedPages = ['home.html', 'settings.html', 'files.html'];
+        const protectedPages = ['home.html', 'settings.html', 'files.html','archive.html'];
         
         const currentPage = window.location.pathname.split('/').pop() || 'index.html';
         
